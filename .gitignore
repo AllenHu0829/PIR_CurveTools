@@ -8,26 +8,12 @@ env/
 venv/
 ENV/
 build/
-develop-eggs/
 dist/
-downloads/
-eggs/
-.eggs/
-lib/
-lib64/
-parts/
-sdist/
-var/
-wheels/
 *.egg-info/
-.installed.cfg
 *.egg
 
-# Streamlit
-.streamlit/*
-!.streamlit/config.toml
-
-# Output folders
+# Runtime
+uploads/
 output/
 NO2/
 GoodSample/
@@ -38,9 +24,12 @@ GoodSample/
 .vscode/
 .idea/
 *.swp
-*.swo
 *~
 
 # OS
 .DS_Store
 Thumbs.db
+
+# Streamlit (legacy)
+.streamlit/*
+!.streamlit/config.toml

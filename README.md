@@ -1,109 +1,91 @@
-# 数据图表生成器
+# PIR CurveTools - 数据图表生成器
 
-一个基于Streamlit的Web应用，用于从CSV或Excel文件中提取数据并批量生成各种类型的图表。
+一个基于 Flask 的 Web 应用，用于从 CSV / Excel 文件中批量生成折线图、柱状图、散点图。可直接部署到公网访问。
 
 ## 功能特点
 
-- ✅ **多格式支持**：支持上传CSV和Excel文件（.csv, .xlsx, .xls）
-- ✅ **多种图表类型**：支持折线图、柱状图、散点图
-- ✅ **列选择**：通过列名选择数据列和行名列
-- ✅ **智能命名**：按照行名自动保存文件，支持自定义行名列
-- ✅ **自定义路径**：可设置输出文件夹路径（相对路径或绝对路径）
-- ✅ **批量处理**：自动处理所有行的数据
-- ✅ **数据解析**：自动解析逗号分隔的数字字符串
-- ✅ **进度显示**：实时显示处理进度
-- ✅ **结果预览**：显示处理结果统计和预览图表
-- ✅ **批量下载**：一键下载所有生成的图表（ZIP格式）
-- ✅ **数据统计**：显示每行数据的统计信息（最小值、最大值、平均值等）
-- ✅ **颜色自定义**：支持多种图表颜色选择
+- **多格式支持** — CSV / XLSX / XLS 文件上传
+- **多种图表** — 折线图、柱状图、散点图一键切换
+- **列选择** — 通过下拉菜单选择数据列和行名列
+- **智能命名** — 按行名自动命名，也可按行号命名
+- **批量处理** — 一次处理数百行数据
+- **一键下载** — ZIP 打包下载所有图表
+- **数据预览** — 上传后即时预览表格
+- **统计信息** — 数据点数、最值、均值
+- **颜色自选** — 6 种预设颜色
 
-## 安装步骤
+## 快速开始
 
-### 1. 安装依赖
+### 本地运行
 
 ```bash
+# 安装依赖
 pip install -r requirements.txt
+
+# 启动应用
+python app.py
 ```
 
-### 2. 运行应用
+浏览器打开 `http://localhost:5000`
+
+### Docker 运行
 
 ```bash
-streamlit run streamlit_app.py
+docker build -t pir-curvetools .
+docker run -p 5000:5000 pir-curvetools
 ```
 
-应用将在浏览器中自动打开，默认地址为：`http://localhost:8501`
+## 公网部署
 
-## 使用方法
+### 方法 1：Render（推荐，免费）
 
-1. **上传文件**：在左侧边栏点击"上传数据文件"按钮，支持CSV和Excel格式
-2. **选择图表类型**：选择折线图、柱状图或散点图
-3. **选择数据列**：从下拉菜单中选择包含数据的列（包含逗号分隔的数字）
-4. **选择行名列**（可选）：选择用于文件命名的列，如果不选择则使用行号
-5. **设置输出路径**：输入输出文件夹路径（默认为"output"）
-6. **选择颜色**：选择图表的颜色
-7. **开始处理**：点击"🚀 开始处理"按钮
-8. **查看结果**：处理完成后可以查看统计信息和预览图表
-9. **下载图片**：点击"📦 下载所有图片（ZIP）"按钮下载所有生成的图表
+1. Fork 本仓库或推送到你的 GitHub
+2. 访问 [render.com](https://render.com)，使用 GitHub 登录
+3. New → Web Service → 选择本仓库
+4. 自动识别 `render.yaml`，点击 Deploy
+5. 等待 2-3 分钟，获得 `https://pir-curvetools.onrender.com`
 
-## 文件格式要求
+### 方法 2：Railway
 
-### CSV文件格式
+1. 访问 [railway.app](https://railway.app)，使用 GitHub 登录
+2. New Project → Deploy from GitHub repo → 选择本仓库
+3. 自动识别 `Procfile`，一键部署
+4. 获得 `https://xxx.up.railway.app`
 
-```csv
-serial_number,adv_algo_d_event,version
-device001,"0,0,-1,0,1,1,1,1",1.16.0
-device002,"0,0,0,0,0,0,0,0",1.16.0
+### 方法 3：Docker 部署到任意服务器
+
+```bash
+# 构建
+docker build -t pir-curvetools .
+
+# 运行（后台）
+docker run -d -p 80:5000 --name curvetools pir-curvetools
 ```
 
-### Excel文件格式
-
-Excel文件应包含类似的列结构，数据列包含逗号分隔的数字字符串。
-
-### 数据要求
-
-- 第一行为表头（列名）
-- 数据列包含逗号分隔的数字字符串
-- 数字字符串需要用引号括起来（CSV标准格式）
-- 行名列可以是任意文本，将用于文件命名
-
-## 部署到Streamlit Cloud
-
-1. 将代码推送到GitHub仓库
-2. 访问 [Streamlit Cloud](https://streamlit.io/cloud)
-3. 点击"New app"
-4. 选择你的GitHub仓库
-5. 设置主文件路径为：`streamlit_app.py`
-6. 点击"Deploy"
+用服务器公网 IP 即可访问。
 
 ## 项目结构
 
 ```
-.
-├── streamlit_app.py      # 主应用文件
-├── requirements.txt      # Python依赖包
-├── README.md            # 项目说明文档
-└── output/              # 生成的图片输出文件夹（自动创建）
+├── app.py              # Flask 后端
+├── templates/
+│   └── index.html      # 前端页面
+├── requirements.txt    # Python 依赖
+├── Procfile            # Heroku / Railway
+├── Dockerfile          # Docker 镜像
+├── render.yaml         # Render.com 配置
+└── README.md
 ```
 
 ## 技术栈
 
-- **Streamlit**：Web应用框架
-- **Pandas**：数据处理和Excel文件读取
-- **Matplotlib**：图表生成
-- **NumPy**：数值计算
-- **openpyxl**：Excel文件读取支持
-- **xlrd**：旧版Excel文件读取支持
+| 层 | 技术 |
+|---|---|
+| 后端 | Flask + Gunicorn |
+| 前端 | Bootstrap 5 + Vanilla JS |
+| 图表 | Matplotlib |
+| 数据 | Pandas / NumPy |
 
-## 注意事项
+## License
 
-- 生成的图片保存在指定的输出文件夹中
-- 如果选择了行名列，文件命名格式：`{行名}.png`
-- 如果未选择行名列，文件命名格式：`row_{行号}.png`
-- 行号从2开始（因为第1行是表头）
-- 文件名中的非法字符（如 `< > : " / \ | ? *`）会被自动替换为下划线
-- 如果某行数据无法解析，将跳过该行
-- 支持相对路径和绝对路径作为输出文件夹
-
-## 许可证
-
-MIT License
+MIT
